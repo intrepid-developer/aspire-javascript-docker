@@ -52,3 +52,6 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+AspireJs/.idea/
+
+AspireJs/AspireJs.Web/node_modules/
