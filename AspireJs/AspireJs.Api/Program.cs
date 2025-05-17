@@ -1,4 +1,5 @@
 using AspireJs.Api;
+using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,14 @@ builder.Services.AddProblemDetails();
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
+
+// Call Seed Data
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<NpgsqlConnection>();
+    var database = new Database(db);
+    database.Seed();
+}
 
 // Configure the HTTP request pipeline.
 app.UseExceptionHandler();

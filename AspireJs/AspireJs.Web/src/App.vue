@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-gray-100">
     <div class="container mx-auto py-8">
-      <h1 class="text-4xl font-bold text-blue-600 mb-8 text-center">Vue 3 + Vite + Tailwind CSS Movie Database</h1>
+      <h1 class="text-4xl font-bold text-blue-600 mb-8 text-center">Movies Database</h1>
       <MovieList :movies="movies" @add-movie="openAddForm" @edit-movie="openEditForm" />
       <MovieForm v-if="showForm" :show="showForm" :movie="selectedMovie" @save="saveMovie" @close="closeForm" />
     </div>
@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import MovieList from './MovieList.vue';
 import MovieForm from './MovieForm.vue';
 
@@ -20,14 +20,27 @@ interface Movie {
   genre: string;
 }
 
-const movies = ref<Movie[]>([
-  { id: 1, title: 'The Shawshank Redemption', year: 1994, genre: 'Drama' },
-  { id: 2, title: 'The Godfather', year: 1972, genre: 'Crime' },
-  { id: 3, title: 'Inception', year: 2010, genre: 'Sci-Fi' },
-]);
-
+const movies = ref<Movie[]>([]);
 const showForm = ref(false);
 const selectedMovie = ref<Movie | undefined>(undefined);
+const loading = ref(false);
+const error = ref<string | null>(null);
+
+async function fetchMovies() {
+  loading.value = true;
+  error.value = null;
+  try {
+    const res = await fetch('/api/movies');
+    if (!res.ok) throw new Error('Failed to fetch movies');
+    movies.value = await res.json();
+  } catch (e: any) {
+    error.value = e.message || 'Unknown error';
+  } finally {
+    loading.value = false;
+  }
+}
+
+onMounted(fetchMovies);
 
 function openAddForm() {
   selectedMovie.value = undefined;
@@ -44,17 +57,31 @@ function closeForm() {
   selectedMovie.value = undefined;
 }
 
-function saveMovie(movie: Omit<Movie, 'id'>) {
+async function saveMovie(movie: Omit<Movie, 'id'>) {
   if (selectedMovie.value) {
     // Edit existing
-    const idx = movies.value.findIndex(m => m.id === selectedMovie.value!.id);
-    if (idx !== -1) {
-      movies.value[idx] = { ...selectedMovie.value, ...movie };
+    const res = await fetch(`/api/movies/${selectedMovie.value.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(movie)
+    });
+    if (res.ok) {
+      await fetchMovies();
+    } else {
+      alert('Failed to update movie');
     }
   } else {
     // Add new
-    const newId = Math.max(...movies.value.map(m => m.id), 0) + 1;
-    movies.value.push({ id: newId, ...movie });
+    const res = await fetch('/api/movies', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(movie)
+    });
+    if (res.ok) {
+      await fetchMovies();
+    } else {
+      alert('Failed to add movie');
+    }
   }
   closeForm();
 }
