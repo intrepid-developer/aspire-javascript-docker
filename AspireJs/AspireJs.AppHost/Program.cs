@@ -1,23 +1,26 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
-builder.AddDockerComposePublisher();
+var env = builder.AddDockerComposeEnvironment("movies-env");
 
+
+#pragma warning disable ASPIRECOMPUTE001
 var moviesDb = builder.AddPostgres("postgres")
     .WithDataVolume()
+    .WithComputeEnvironment(env)
     .WithPgAdmin(resource => { resource.WithUrlForEndpoint("http", u => u.DisplayText = "PG Admin"); })
     .AddDatabase("movies");
 
 var api = builder.AddProject<Projects.AspireJs_Api>("api")
-    .WithHttpsHealthCheck("/health")
-    .WithHttpsEndpoint()
     .WithExternalHttpEndpoints()
-    .WithReplicas(2)
-    .WithReference(moviesDb).WaitFor(moviesDb);
+    .WithReference(moviesDb).WaitFor(moviesDb)
+    .WithComputeEnvironment(env);
 
 var web = builder.AddViteApp("web", "../AspireJs.Web")
     .WithNpmPackageInstallation()
     .WithExternalHttpEndpoints()
     .WithReference(api).WaitFor(api)
-    .PublishAsDockerFile();
+    .PublishAsDockerFile()
+    .WithComputeEnvironment(env);
+#pragma warning restore ASPIRECOMPUTE001
 
 builder.Build().Run();
