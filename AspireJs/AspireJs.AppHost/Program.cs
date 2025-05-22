@@ -1,7 +1,8 @@
+using AspireJs.AppHost;
+
 var builder = DistributedApplication.CreateBuilder(args);
 
 var env = builder.AddDockerComposeEnvironment("movies-env");
-
 
 #pragma warning disable ASPIRECOMPUTE001
 var postgres = builder.AddPostgres("postgres")
@@ -28,5 +29,8 @@ var web = builder.AddViteApp("web", "../AspireJs.Web")
     .PublishAsDockerFile()
     .WithComputeEnvironment(env);
 #pragma warning restore ASPIRECOMPUTE001
+
+//Add Aspire Dashboard for use with Docker
+builder.AddDashboard();
 
 builder.Build().Run();

@@ -4,6 +4,8 @@
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <!-- Ensure Docker image is built for amd64 -->
+        <TargetRuntime>linux/amd64</TargetRuntime>
     </PropertyGroup>
 
     <ItemGroup>
