@@ -32,7 +32,7 @@ async function fetchMovies() {
   try {
     const res = await fetch('/api/movies');
     if (!res.ok) throw new Error('Failed to fetch movies');
-    movies.value = await res.json();
+    movies.value = await res.json() as Movie[];
   } catch (e: any) {
     error.value = e.message || 'Unknown error';
   } finally {

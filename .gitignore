@@ -55,3 +55,5 @@ nunit-*.xml
 AspireJs/.idea/
 
 AspireJs/AspireJs.Web/node_modules/
+
+infra/.env

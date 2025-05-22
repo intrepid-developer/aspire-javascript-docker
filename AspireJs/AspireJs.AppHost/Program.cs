@@ -4,16 +4,22 @@ var env = builder.AddDockerComposeEnvironment("movies-env");
 
 
 #pragma warning disable ASPIRECOMPUTE001
-var moviesDb = builder.AddPostgres("postgres")
+var postgres = builder.AddPostgres("postgres")
+    .WithEnvironment("POSTGRES_DB","movies")
     .WithDataVolume()
     .WithComputeEnvironment(env)
-    .WithPgAdmin(resource => { resource.WithUrlForEndpoint("http", u => u.DisplayText = "PG Admin"); })
-    .AddDatabase("movies");
+    .WithPgAdmin(resource => { resource.WithUrlForEndpoint("http", u => u.DisplayText = "PG Admin"); });
+
+var database = postgres.AddDatabase("movies");
 
 var api = builder.AddProject<Projects.AspireJs_Api>("api")
     .WithExternalHttpEndpoints()
-    .WithReference(moviesDb).WaitFor(moviesDb)
-    .WithComputeEnvironment(env);
+    .WithReference(database).WaitFor(database)
+    .WithComputeEnvironment(env)
+    .PublishAsDockerComposeService((_, service) =>
+    {
+        service.Restart = "always";
+    });
 
 var web = builder.AddViteApp("web", "../AspireJs.Web")
     .WithNpmPackageInstallation()
