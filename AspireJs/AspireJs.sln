@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspireJs.AppHost", "AspireJs.AppHost\AspireJs.AppHost.csproj", "{A4C84AE6-ECFA-459F-889C-614071C0D204}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspireJs.ServiceDefaults", "AspireJs.ServiceDefaults\AspireJs.ServiceDefaults.csproj", "{AAD5BFA6-B81B-4233-95C3-8236788731AA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspireJs.Api", "AspireJs.Api\AspireJs.Api.csproj", "{AC53E6C1-EE57-438F-A298-58ACC6C89AE0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A4C84AE6-ECFA-459F-889C-614071C0D204}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4C84AE6-ECFA-459F-889C-614071C0D204}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4C84AE6-ECFA-459F-889C-614071C0D204}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4C84AE6-ECFA-459F-889C-614071C0D204}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAD5BFA6-B81B-4233-95C3-8236788731AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAD5BFA6-B81B-4233-95C3-8236788731AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAD5BFA6-B81B-4233-95C3-8236788731AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAD5BFA6-B81B-4233-95C3-8236788731AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC53E6C1-EE57-438F-A298-58ACC6C89AE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC53E6C1-EE57-438F-A298-58ACC6C89AE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC53E6C1-EE57-438F-A298-58ACC6C89AE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC53E6C1-EE57-438F-A298-58ACC6C89AE0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

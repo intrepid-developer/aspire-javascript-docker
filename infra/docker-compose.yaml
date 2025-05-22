@@ -1,0 +1,55 @@
+services:
+  postgres:
+    image: "docker.io/library/postgres:17.4"
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: "scram-sha-256"
+      POSTGRES_INITDB_ARGS: "--auth-host=scram-sha-256 --auth-local=scram-sha-256"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+      POSTGRES_DB: "movies"
+    ports:
+      - "8000:5432"
+    volumes:
+      - type: "volume"
+        target: "/var/lib/postgresql/data"
+        source: "aspirejs.apphost-a638830242-postgres-data"
+        read_only: false
+    networks:
+      - "aspire"
+  api:
+    image: "${API_IMAGE}"
+    environment:
+      OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EXCEPTION_LOG_ATTRIBUTES: "true"
+      OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EVENT_LOG_ATTRIBUTES: "true"
+      OTEL_DOTNET_EXPERIMENTAL_OTLP_RETRY: "in_memory"
+      ASPNETCORE_FORWARDEDHEADERS_ENABLED: "true"
+      HTTP_PORTS: "8001"
+      ConnectionStrings__movies: "Host=postgres;Port=5432;Username=postgres;Password=${POSTGRES_PASSWORD};Database=movies"
+    ports:
+      - "8002:8001"
+      - "8004:8003"
+    depends_on:
+      postgres:
+        condition: "service_started"
+    networks:
+      - "aspire"
+    restart: "always"
+  web:
+    image: "${WEB_IMAGE}"
+    environment:
+      NODE_ENV: "production"
+      PORT: "8005"
+      services__api__http__0: "http://api:8001"
+    ports:
+      - "8006:8005"
+    depends_on:
+      api:
+        condition: "service_started"
+    networks:
+      - "aspire"
+networks:
+  aspire:
+    driver: "bridge"
+volumes:
+  aspirejs.apphost-a638830242-postgres-data:
+    driver: "local"

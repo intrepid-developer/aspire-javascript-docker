@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <!-- Ensure Docker image is built for amd64 -->
+        <TargetRuntime>linux/amd64</TargetRuntime>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\AspireJs.ServiceDefaults\AspireJs.ServiceDefaults.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Aspire.Npgsql" Version="9.3.0" />
+        <PackageReference Include="Dapper" Version="2.1.66" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.5" />
+    </ItemGroup>
+
+</Project>
