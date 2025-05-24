@@ -16,10 +16,11 @@ In this guide, you'll learn how to:
 - Publish your Aspire project to Docker Compose.
 - Deploy your application to a Digital Ocean droplet (or any Docker host).
 
-## Why Aspire for JavaScript and More?
+## Why Use Aspire?
 
-Aspire provides a powerful way to define, compose, and manage cloud-native applications. Although it's built with .NET in mind, Aspire's flexible architecture allows you to include and orchestrate non-.NET services, such as Node.js or other JavaScript-based apps, alongside .NET services and databases like PostgreSQL.
+.NET Aspire is Microsoft’s orchestration tooling to really help with the developer experience. Many believe it’s only for .NET applications, but it can be used for pretty much any language. There are lots of integrations, both official and in the community toolkit, that give nice typed experiences. But if there isn’t a dedicated integration it’s not a problem, as long as you can run your application in Docker then Aspire has you covered. 
 
+To highlight this, we’re going to be publishing and deploying our Aspire application to a Digital Ocean droplet (though any VPS provider will work). For this demo, we have a basic .NET API, a Vue.js Vite web app, and a Postgres database. Everything we’re using here can be run on Docker and has no need for Azure or any specific cloud provider.
 ## Prerequisites
 
 - [Docker](https://www.docker.com/get-started) installed locally.
@@ -27,6 +28,12 @@ Aspire provides a powerful way to define, compose, and manage cloud-native appli
 - A [Digital Ocean](https://m.do.co/c/1791153d5ad6) account and a provisioned droplet (or any Docker-compatible host).
 - Basic familiarity with .NET, JavaScript, and Docker.
 
+## Install the Aspire CLI
+To install the Aspire CLI, you can use the .NET CLI tool. Open your terminal and run:
+
+```sh
+dotnet tool install --global aspire.cli —prerelease
+```
 
 ## Running Locally with Aspire
 
@@ -36,7 +43,7 @@ Aspire provides a powerful way to define, compose, and manage cloud-native appli
    cd aspire-javascript-docker
    ```
 
-2. **Publish Aspire project to Docker Compose:**
+2. **Run it locally:**
    ```sh
    aspire run
    ```
