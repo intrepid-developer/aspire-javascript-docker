@@ -7,6 +7,9 @@ services:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
       POSTGRES_DB: "movies"
+      OTEL_EXPORTER_OTLP_ENDPOINT: "http://dashboard:18889"
+      OTEL_EXPORTER_OTLP_PROTOCOL: "grpc"
+      OTEL_SERVICE_NAME: "postgres"
     ports:
       - "8000:5432"
     volumes:
@@ -25,6 +28,9 @@ services:
       ASPNETCORE_FORWARDEDHEADERS_ENABLED: "true"
       HTTP_PORTS: "8001"
       ConnectionStrings__movies: "Host=postgres;Port=5432;Username=postgres;Password=${POSTGRES_PASSWORD};Database=movies"
+      OTEL_EXPORTER_OTLP_ENDPOINT: "http://dashboard:18889"
+      OTEL_EXPORTER_OTLP_PROTOCOL: "grpc"
+      OTEL_SERVICE_NAME: "api"
     ports:
       - "8002:8001"
       - "8004:8003"
@@ -40,6 +46,9 @@ services:
       NODE_ENV: "production"
       PORT: "8005"
       services__api__http__0: "http://api:8001"
+      OTEL_EXPORTER_OTLP_ENDPOINT: "http://dashboard:18889"
+      OTEL_EXPORTER_OTLP_PROTOCOL: "grpc"
+      OTEL_SERVICE_NAME: "web"
     ports:
       - "8006:8005"
     depends_on:
@@ -47,6 +56,14 @@ services:
         condition: "service_started"
     networks:
       - "aspire"
+  dashboard:
+    image: "mcr.microsoft.com/dotnet/nightly/aspire-dashboard:latest"
+    ports:
+      - "8007:18888"
+      - "8008:18889"
+    networks:
+      - "aspire"
+    restart: "always"
 networks:
   aspire:
     driver: "bridge"

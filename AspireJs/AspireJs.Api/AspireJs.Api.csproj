@@ -6,6 +6,8 @@
         <Nullable>enable</Nullable>
         <!-- Ensure Docker image is built for amd64 -->
         <TargetRuntime>linux/amd64</TargetRuntime>
+        <ContainerOs>Linux</ContainerOs>
+        <ContainerArch>x64</ContainerArch>
     </PropertyGroup>
 
     <ItemGroup>
