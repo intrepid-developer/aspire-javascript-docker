@@ -5,6 +5,8 @@ var builder = DistributedApplication.CreateBuilder(args);
 var env = builder.AddDockerComposeEnvironment("movies-env");
 
 #pragma warning disable ASPIRECOMPUTE001
+
+// Register our Postgres Database
 var postgres = builder.AddPostgres("postgres")
     .WithEnvironment("POSTGRES_DB","movies")
     .WithDataVolume()
@@ -13,6 +15,7 @@ var postgres = builder.AddPostgres("postgres")
 
 var database = postgres.AddDatabase("movies");
 
+// Register our .Net Api
 var api = builder.AddProject<Projects.AspireJs_Api>("api")
     .WithExternalHttpEndpoints()
     .WithReference(database).WaitFor(database)
@@ -22,7 +25,8 @@ var api = builder.AddProject<Projects.AspireJs_Api>("api")
         service.Restart = "always";
     });
 
-var web = builder.AddViteApp("web", "../AspireJs.Web")
+// Register our Vue.js Web App
+var web = builder.AddViteApp("web", "../AspireJs.Web/")
     .WithNpmPackageInstallation()
     .WithExternalHttpEndpoints()
     .WithReference(api).WaitFor(api)
