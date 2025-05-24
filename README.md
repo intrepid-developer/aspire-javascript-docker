@@ -67,7 +67,22 @@ Aspire provides a powerful way to define, compose, and manage cloud-native appli
 
 ## Deploying to Digital Ocean (or Any Docker Host)
 
-1. **Build and push Docker images** to your container registry (e.g., Docker Hub or Digital Ocean Container Registry).
+1. **Push Docker images** to your container registry (e.g., Digital Ocean Container Registry in this example).
+
+```sh
+doctl registry login
+```
+> Note: You can follow the Digital Ocean Guide on [How to Push and Pull Images](https://docs.digitalocean.com/products/container-registry/getting-started/quickstart/) if you need help with this step.
+
+Next, tag the new `api` and `web` images and push them to your registry (replace `<your registry>` with your actual registry name):
+
+```sh
+docker tag api registry.digitalocean.com/<your registry>/api
+docker tag web registry.digitalocean.com/<your registry>/web
+
+docker push registry.digitalocean.com/<your registry>/api
+docker push registry.digitalocean.com/<your registry>/web
+```
 
 2. **Copy your `docker-compose.yml` and `.env`** to your target host.
 
@@ -77,12 +92,15 @@ Aspire provides a powerful way to define, compose, and manage cloud-native appli
    ```
 
 4. **Pull images and start services:**
+   Make sure you have `docker` and `doctl` installed on your droplet and that you're logged in to the Registry.
    ```sh
+   doctl registry login
+   
    docker compose pull
    docker compose up -d
    ```
 
-5. **Verify your app is running** by visiting your droplets host's public IP in a browser `http://your_droplet_ip:8006`
+5. **Verify your app is running** by visiting your droplet's public IP in a browser `http://your_droplet_ip:8006`
 ![AppDeployed](images/app.png)
 
 ## Bonus: Cutdown Aspire Dashboard
